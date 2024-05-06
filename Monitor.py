@@ -76,3 +76,5 @@ def main():
         #st.dataframe(filtered_df)
 
 
+if __name__ == "__main__":
+    main()
