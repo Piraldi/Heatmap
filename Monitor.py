@@ -20,7 +20,6 @@ def filter_dataframe_by_date(df):
     # Seleziona l'intervallo di date in una sidebar (container)
   with st.sidebar:
     st.subheader('Imposta filtro tra date:')
-    df['DATA PRELIEVO'] = pd.to_datetime(df['DATA PRELIEVO'], format='%d/%m/%y')
     min_date = df['DATA PRELIEVO'].min().date()
     max_date = df['DATA PRELIEVO'].max().date()
     with st.form('filtro'):
