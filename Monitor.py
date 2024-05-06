@@ -92,6 +92,9 @@ def main():
         #st.write("Contenuto del file 'Missioni':")
         missioni_df = load_data(missioni)
         missioni_df = missioni_df.rename(columns={"QTA' PRELEVATA": 'QTA PRELEVATA'})
+        # Trasforma la colonna desiderata in stringa
+        missioni_df['ARTICOLO'] = missioni_df['ARTICOLO'].astype(str)
+        missioni_df['ORDINE'] = missioni_df['ORDINE'].astype(str)
         st.write("Contenuto del file 'Missioni':")
         st.dataframe(missioni_df)
     
