@@ -22,7 +22,7 @@ def filter_dataframe_by_date(df):
     # Converti la colonna 'DATA PRELIEVO' in tipo datetime se non lo è già
     df['DATA PRELIEVO'] = pd.to_datetime(df['DATA PRELIEVO'], format='%d/%m/%Y')
     # Converti la colonna 'ORARIO' in tipo datetime
-    df['ORARIO'] = pd.to_datetime(df['ORARIO'], format='%H:%M:%S')
+    df['ORA PRELIEVO'] = pd.to_datetime(df['ORA PRELIEVO'], format='%H:%M:%S')
     st.subheader('Imposta filtro tra date:')
     min_date = df['DATA PRELIEVO'].min().date()
     max_date = df['DATA PRELIEVO'].max().date()
