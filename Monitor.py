@@ -51,7 +51,7 @@ def calculate_productivity_per_order(df):
     df = df.dropna(subset=['QTA PRELEVATA'])
 
     # Raggruppa per ordine, utente,data, tipo cliente e tipo prelievo
-    productivity_df_per_order = df.groupby(['UTENTE PRELIEVO', 'DATA PRELIEVO','TIPO SCATOLA']).agg({
+    productivity_df_per_order = df.groupby([' ORDINE','UTENTE PRELIEVO', 'DATA PRELIEVO','TIPO SCATOLA']).agg({
         'QTA PRELEVATA': 'sum',
         'ARTICOLO': 'size',# Conteggio delle righe per ogni gruppo
         'ORA PRELIEVO': lambda x: (x.max() - x.min()).total_seconds() / 3600,
