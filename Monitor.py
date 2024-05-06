@@ -35,3 +35,44 @@ def filter_dataframe_by_date(df):
        return filtered_df 
     return df
      
+# Funzione principale dell'applicazione Streamlit
+def main():
+    st.title("Monitor Education")
+
+    missioni = st.file_uploader("Carica il file 'Missioni' CSV", type=["csv"])
+
+
+    if missioni:
+        
+        totale_ubicazioni_df = pd.read_csv('Totale ubicazioni.csv', sep=";")
+       
+        #st.write("Contenuto del file 'Missioni':")
+        missioni_df = load_data(missioni)
+        
+        # tengo le colonne dalla 2 alla 40
+        missioni_df = missioni_df.iloc[:, :41]
+        st.write("Contenuto del file 'Missioni':")
+        st.dataframe(missioni_df)
+    
+        # Rimuovere il punto come separatore delle migliaia e la virgola come separatore dei decimali
+        missioni_df['Quantità Movimentata'] = missioni_df['Quantità Movimentata'].str.replace('.', '').str.replace(',', '.')
+        
+        # Tentare di convertire la colonna 'Quantità Movimentata' in tipo float
+        missioni_df['Quantità Movimentata'] = pd.to_numeric(missioni_df['Quantità Movimentata'], errors='coerce')
+        
+        # Filtrare le righe con NaN o valori non validi
+        righe_nan = missioni_df[missioni_df['Quantità Movimentata'].isna()]
+
+        # Rimuovere le righe con NaN o valori non validi
+        missioni_df = missioni_df.dropna(subset=['Quantità Movimentata'])
+
+        # Convertire la colonna 'Quantità Movimentata' in tipo int
+        missioni_df['Quantità Movimentata'] = missioni_df['Quantità Movimentata'].astype(int)
+        
+        
+        #filtro le missioni iin base alle date
+        filtered_df = filter_dataframe_by_date(missioni_df)
+        #st.write("Database filtrato per data")
+        #st.dataframe(filtered_df)
+
+
