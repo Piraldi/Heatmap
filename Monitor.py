@@ -52,19 +52,19 @@ def main():
         st.dataframe(missioni_df)
     
         # Rimuovere il punto come separatore delle migliaia e la virgola come separatore dei decimali
-        missioni_df['QTA' PRELEVATA'] = missioni_df['QTA' PRELEVATA'].str.replace('.', '').str.replace(',', '.')
+        missioni_df['QTA PRELEVATA'] = missioni_df['QTA PRELEVATA'].str.replace('.', '').str.replace(',', '.')
         
         # Tentare di convertire la colonna 'Quantità Movimentata' in tipo float
-        missioni_df['QTA' PRELEVATA'] = pd.to_numeric(missioni_df['QTA' PRELEVATA'], errors='coerce')
+        missioni_df['QTA PRELEVATA'] = pd.to_numeric(missioni_df['QTA PRELEVATA'], errors='coerce')
         
         # Filtrare le righe con NaN o valori non validi
-        righe_nan = missioni_df[missioni_df['QTA' PRELEVATA'].isna()]
+        righe_nan = missioni_df[missioni_df['QTA PRELEVATA'].isna()]
 
         # Rimuovere le righe con NaN o valori non validi
-        missioni_df = missioni_df.dropna(subset=['QTA' PRELEVATA'])
+        missioni_df = missioni_df.dropna(subset=['QTA PRELEVATA'])
 
         # Convertire la colonna 'Quantità Movimentata' in tipo int
-        missioni_df['QTA' PRELEVATA'] = missioni_df['QTA' PRELEVATA'].astype(int)
+        missioni_df['QTA PRELEVATA'] = missioni_df['QTA PRELEVATA'].astype(int)
         
         
         #filtro le missioni iin base alle date
