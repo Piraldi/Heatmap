@@ -46,7 +46,7 @@ def main():
        
         #st.write("Contenuto del file 'Missioni':")
         missioni_df = load_data(missioni)
-        
+        missioni_df = missioni_df.rename(columns={"QTA' PRELEVATA": 'QTA PRELEVATA'})
         st.write("Contenuto del file 'Missioni':")
         st.dataframe(missioni_df)
     
