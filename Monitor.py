@@ -44,7 +44,7 @@ def main():
 
     if missioni:
         
-        totale_ubicazioni_df = pd.read_csv('Totale ubicazioni.csv', sep=";")
+        totale_ubicazioni_df = pd.read_csv('totale_ubicazioni.csv', sep=";")
        
         #st.write("Contenuto del file 'Missioni':")
         missioni_df = load_data(missioni)
