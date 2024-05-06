@@ -51,11 +51,6 @@ def main():
         st.write("Contenuto del file 'Missioni':")
         st.dataframe(missioni_df)
     
-        # Rimuovere il punto come separatore delle migliaia e la virgola come separatore dei decimali
-        missioni_df['QTA PRELEVATA'] = missioni_df['QTA PRELEVATA'].str.replace('.', '').str.replace(',', '.')
-        
-        # Tentare di convertire la colonna 'Quantità Movimentata' in tipo float
-        missioni_df['QTA PRELEVATA'] = pd.to_numeric(missioni_df['QTA PRELEVATA'], errors='coerce')
         
         # Filtrare le righe con NaN o valori non validi
         righe_nan = missioni_df[missioni_df['QTA PRELEVATA'].isna()]
@@ -67,7 +62,7 @@ def main():
         missioni_df['QTA PRELEVATA'] = missioni_df['QTA PRELEVATA'].astype(int)
         
         
-        #filtro le missioni iin base alle date
+        #filtro le missioni in base alle date
         filtered_df = filter_dataframe_by_date(missioni_df)
         st.write("Database filtrato per data")
         st.dataframe(filtered_df)
