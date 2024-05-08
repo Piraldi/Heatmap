@@ -49,6 +49,65 @@ def update_copie_prelevate(totale_ubicazioni_df, pivot_df):
     totale_ubicazioni_df['Copie Prelevate'] = updated_copie_prelevate
     return totale_ubicazioni_df
 
+def heatmap_Area100(df):
+    Area100_df = df[df['Area'] == '100']
+    
+    #st.dataframe(Area100_df)
+    # Raggruppa per 'Ubicazione' e somma le copie prelevate
+    Area100_df = Area100_df.groupby('Ubicazione')['Copie Prelevate'].sum().reset_index()
+    
+    #creo fila e colonna
+    Area100_df['Fila'] = Area100_df['Ubicazione'].str[6:8]
+    Area100_df['Colonna'] = Area100_df['Ubicazione'].str[9:11]
+   
+    #creo array x e y (valori corsia e campata unici e ordinati)
+    sorted_df = Area100_df.sort_values(by='Fila')
+    x = sorted_df['Fila'].unique()
+    sorted_df = Area100_df.sort_values(by='Colonna')
+    y = sorted_df['Colonna'].unique()
+    
+    #st.write("Dataframe S01 con corsia e campata")
+    #st.dataframe(Area100_df)
+    
+    # Crea un array vuoto delle dimensioni appropriate per la heatmap
+    heatmap_data = np.zeros((len(y), len(x)))
+    
+    # Riempimento dell'array con i valori delle 'Copie Prelevate'
+    for i, colonna in enumerate(y):
+        for j, fila in enumerate(x):
+            selected_row = Area100_df[(Area100_df['Colonna'] == colonna) & (Area100_df['Fila'] == fila)]
+            if not selected_row.empty:
+                heatmap_data[i][j] = selected_row['Copie Prelevate'].iloc[0]
+    
+    # Creazione della heatmap utilizzando Plotly Express
+    fig = px.imshow(
+        heatmap_data,
+        x=x,
+        y=y,
+        color_continuous_scale=[
+            [0.0, 'rgb(100, 150, 50)'],
+            [0.2, 'yellow'],
+            [0.6, 'orange'],
+            [0.8, 'red'],
+            [1.0, 'red']
+        ]
+    )
+    
+    # Personalizzazione del layout della heatmap
+    fig.update_layout(
+        xaxis_title="Fila",
+        yaxis_title="Colonna",
+        xaxis_side="top"  # Posiziona l'asse x in alto
+    )
+    # Personalizza il testo del cursore
+    fig.update_traces(hovertemplate="Fila: %{x}<br>Colonna: %{y}<br>Copie Prelevate: %{z}")
+    # Mostra la figura Plotly utilizzando Streamlit
+    st.plotly_chart(fig)
+    
+    #totale prelievi di area
+    totale_prelievi_Area100 = np.sum(heatmap_data)
+   
+    return totale_prelievi_Area100  
 
 #funzione produttività per ordine
 def calculate_productivity_per_order(df):
@@ -93,6 +152,12 @@ def to_excel(df):
 
 # Funzione principale dell'applicazione Streamlit
 def main():
+    # Creazione del sommario delle heatmap nella sidebar
+    st.sidebar.title("Sommario Heatmaps")
+    st.sidebar.markdown("""
+    - [Heatmap Area100](#heatmap-Area100)
+    """, unsafe_allow_html=True)
+    
     st.title("Monitor Education")
 
     missioni = st.file_uploader("Carica il file 'Missioni' CSV", type=["csv"])
@@ -157,6 +222,17 @@ def main():
         st.markdown("---")
     
 
+
+
+        #Heatmap
+        st.markdown("<a name='heatmap-Area100'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
+        st.header('Heatmap Area 100')
+        totale_prelievi_Area100_nel_periodo = int(heatmap_AS(updated_totale_ubicazioni_df,1))
+        st.subheader(f"Totale prelievi AS piano 1: {totale_prelievi_Area100_nel_periodo}" )
+        percentuale =  (totale_prelievi_Area100_nel_periodo/totale_prelievi_nel_periodo)*100
+        st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
+        st.markdown("---")
+        
         # Chiama la funzione per calcolare la produttività per ordine
         productivity_df_per_order = calculate_productivity_per_order(filtered_df)
         st.header("Productivity Per Order")
