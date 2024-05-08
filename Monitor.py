@@ -229,7 +229,7 @@ def main():
         st.markdown("<a name='heatmap-Area100'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
         st.header('Heatmap Area 100')
         totale_prelievi_Area100_nel_periodo = int(heatmap_Area100(updated_totale_ubicazioni_df))
-        st.subheader(f"Totale prelievi AS piano 1: {totale_prelievi_Area100_nel_periodo}" )
+        st.subheader(f"Totale prelievi Area 100: {totale_prelievi_Area100_nel_periodo}" )
         percentuale =  (totale_prelievi_Area100_nel_periodo/totale_prelievi_nel_periodo)*100
         st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
         st.markdown("---")
