@@ -117,7 +117,7 @@ def heatmap_Area200(df):
     Area200_df['Colonna'] = Area200_df['Ubicazione'].str[4:7]
    
     #creo array x e y (valori corsia e campata unici e ordinati)
-    sorted_df = Area200_df.sort_values(by='CoFilalonna')
+    sorted_df = Area200_df.sort_values(by='Fila')
     x = sorted_df['Fila'].unique()
     sorted_df = Area200_df.sort_values(by='Colonna')
     y = sorted_df['Colonna'].unique()
