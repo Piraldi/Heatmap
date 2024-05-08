@@ -414,7 +414,7 @@ def main():
         st.markdown("---")
 
         #Heatmap Area 300 piano 1
-       st.markdown("<a name='heatmap-Area300'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
+        st.markdown("<a name='heatmap-Area300'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
         st.header('Heatmap Area 300')
         totale_prelievi_Area300_nel_periodo = int(heatmap_Area300(updated_totale_ubicazioni_df,1))
         st.subheader(f"Totale prelievi Area 300 piano 1: {totale_prelievi_Area300_nel_periodo}" )
