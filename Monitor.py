@@ -42,7 +42,7 @@ def update_copie_prelevate(totale_ubicazioni_df, pivot_df):
     updated_copie_prelevate = []
     for ubicazione in totale_ubicazioni_df['Ubicazione']:
         if ubicazione in pivot_df.index:
-            updated_copie_prelevate.append(pivot_df.loc[ubicazione, 'Quantità Movimentata'])
+            updated_copie_prelevate.append(pivot_df.loc[ubicazione, 'QTA PRELEVATA'])
         else:
             # Se l'ubicazione non è trovata nella tabella pivot, imposta 'Copie Prelevate' a 0
             updated_copie_prelevate.append(0)
