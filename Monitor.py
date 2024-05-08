@@ -50,7 +50,7 @@ def update_copie_prelevate(totale_ubicazioni_df, pivot_df):
     return totale_ubicazioni_df
 
 def heatmap_Area100(df):
-    Area100_df = df[df['Area'] == '100']
+    Area100_df = df[df['Area'] == 'Area100']
     
     st.write("Dataframe Area 100 ")
     st.dataframe(Area100_df)
