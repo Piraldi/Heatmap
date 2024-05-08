@@ -108,6 +108,9 @@ def main():
         # Trasforma la colonna desiderata in stringa
         missioni_df['ARTICOLO'] = missioni_df['ARTICOLO'].astype(str)
         missioni_df[' ORDINE'] = missioni_df[' ORDINE'].astype(str)
+        
+        # Crea una nuova colonna 'ubicazione nel formato 'fila.colonna.rip.fraz'
+        missioni_df['UBICAZIONE'] = missioni_df['FILA'] + '.' + missioni_df['COLONNA'] + '.' + missioni_df['RIPIANO'] + '.' + missioni_df['FRAZIONAMENTO']
         st.write("Contenuto del file 'Missioni':")
         st.dataframe(missioni_df)
     
@@ -124,9 +127,28 @@ def main():
         
         #filtro le missioni in base alle date
         filtered_df = filter_dataframe_by_date(missioni_df)
-        st.write("Database filtrato per data")
-        st.dataframe(filtered_df)
+        #st.write("Database filtrato per data")
+        #st.dataframe(filtered_df)
 
+        pivot_missioni = filtered_df.pivot_table(index='UBICAZIONE', values='QTA PRELEVATA', aggfunc='sum')
+        #st.write("Tabella Pivot 'Missioni':")
+        #st.dataframe(pivot_missioni)
+        updated_totale_ubicazioni_df = update_copie_prelevate(totale_ubicazioni_df, pivot_missioni)
+        st.write("TOTALE UBICAZIONI AGGIORNATO")
+        st.dataframe(updated_totale_ubicazioni_df)
+        # Elimina la colonna 2 dal nuovo dataframe
+        #updated_totale_ubicazioni_df = updated_totale_ubicazioni_df.drop(updated_totale_ubicazioni_df.columns[1], axis=1)
+        
+        
+        st.markdown("---")
+        totale_prelievi_nel_periodo = int(filtered_df['QTA PRELEVATA'].sum())
+
+        # Istogramma copie per area
+        area_sums = updated_totale_ubicazioni_df.groupby('Area')['Copie Prelevate'].sum().reset_index()
+        fig = px.bar(area_sums, x='Area', y='Copie Prelevate', title='Copie Prelevate per Area')
+        st.plotly_chart(fig)
+        st.markdown("---")
+    
 
         # Chiama la funzione per calcolare la produttività per ordine
         productivity_df_per_order = calculate_productivity_per_order(filtered_df)
