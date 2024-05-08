@@ -52,8 +52,6 @@ def update_copie_prelevate(totale_ubicazioni_df, pivot_df):
 def heatmap_Area100(df):
     Area100_df = df[df['Area'] == 'Area100']
     
-    st.write("Dataframe Area 100 ")
-    st.dataframe(Area100_df)
     # Raggruppa per 'Ubicazione' e somma le copie prelevate
     Area100_df = Area100_df.groupby('Ubicazione')['Copie Prelevate'].sum().reset_index()
     
@@ -67,8 +65,6 @@ def heatmap_Area100(df):
     sorted_df = Area100_df.sort_values(by='Colonna')
     y = sorted_df['Colonna'].unique()
     
-    st.write("Dataframe Area 100 con corsia e campata")
-    st.dataframe(Area100_df)
     
     # Crea un array vuoto delle dimensioni appropriate per la heatmap
     heatmap_data = np.zeros((len(y), len(x)))
@@ -109,6 +105,64 @@ def heatmap_Area100(df):
     totale_prelievi_Area100 = np.sum(heatmap_data)
    
     return totale_prelievi_Area100  
+
+def heatmap_Area200(df):
+    Area200_df = df[df['Area'] == 'Area100']
+    
+    # Raggruppa per 'Ubicazione' e somma le copie prelevate
+    Area200_df = Area200_df.groupby('Ubicazione')['Copie Prelevate'].sum().reset_index()
+    
+    #creo fila e colonna
+    Area200_df['Fila'] = Area200_df['Ubicazione'].str[:3]
+    Area200_df['Colonna'] = Area200_df['Ubicazione'].str[4:7]
+   
+    #creo array x e y (valori corsia e campata unici e ordinati)
+    sorted_df = Area200_df.sort_values(by='Fila')
+    x = sorted_df['Fila'].unique()
+    sorted_df = Area200_df.sort_values(by='Colonna')
+    y = sorted_df['Colonna'].unique()
+    
+    
+    # Crea un array vuoto delle dimensioni appropriate per la heatmap
+    heatmap_data = np.zeros((len(y), len(x)))
+    
+    # Riempimento dell'array con i valori delle 'Copie Prelevate'
+    for i, colonna in enumerate(y):
+        for j, fila in enumerate(x):
+            selected_row = Area200_df[(Area200_df['Colonna'] == colonna) & (Area200_df['Fila'] == fila)]
+            if not selected_row.empty:
+                heatmap_data[i][j] = selected_row['Copie Prelevate'].iloc[0]
+    
+    # Creazione della heatmap utilizzando Plotly Express
+    fig = px.imshow(
+        heatmap_data,
+        x=x,
+        y=y,
+        color_continuous_scale=[
+            [0.0, 'rgb(100, 150, 50)'],
+            [0.2, 'yellow'],
+            [0.6, 'orange'],
+            [0.8, 'red'],
+            [1.0, 'red']
+        ]
+    )
+    
+    # Personalizzazione del layout della heatmap
+    fig.update_layout(
+        xaxis_title="Fila",
+        yaxis_title="Colonna",
+        xaxis_side="top"  # Posiziona l'asse x in alto
+    )
+    # Personalizza il testo del cursore
+    fig.update_traces(hovertemplate="Fila: %{x}<br>Colonna: %{y}<br>Copie Prelevate: %{z}")
+    # Mostra la figura Plotly utilizzando Streamlit
+    st.plotly_chart(fig)
+    
+    #totale prelievi di area
+    totale_prelievi_Area200 = np.sum(heatmap_data)
+   
+    return totale_prelievi_Area200  
+
 
 #funzione produttività per ordine
 def calculate_productivity_per_order(df):
@@ -157,6 +211,7 @@ def main():
     st.sidebar.title("Sommario Heatmaps")
     st.sidebar.markdown("""
     - [Heatmap Area100](#heatmap-Area100)
+    - [Heatmap Area200](#heatmap-Area200)
     """, unsafe_allow_html=True)
     
     st.title("Monitor Education")
@@ -225,12 +280,21 @@ def main():
 
 
 
-        #Heatmap
+        #Heatmap Area 100
         st.markdown("<a name='heatmap-Area100'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
         st.header('Heatmap Area 100')
         totale_prelievi_Area100_nel_periodo = int(heatmap_Area100(updated_totale_ubicazioni_df))
         st.subheader(f"Totale prelievi Area 100: {totale_prelievi_Area100_nel_periodo}" )
         percentuale =  (totale_prelievi_Area100_nel_periodo/totale_prelievi_nel_periodo)*100
+        st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
+        st.markdown("---")
+
+        #Heatmap Area 200
+        st.markdown("<a name='heatmap-Area200'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
+        st.header('Heatmap Area 200')
+        totale_prelievi_Area200_nel_periodo = int(heatmap_Area200(updated_totale_ubicazioni_df))
+        st.subheader(f"Totale prelievi Area 200: {totale_prelievi_Area200_nel_periodo}" )
+        percentuale =  (totale_prelievi_Area200_nel_periodo/totale_prelievi_nel_periodo)*100
         st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
         st.markdown("---")
         
