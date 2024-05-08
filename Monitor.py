@@ -220,6 +220,65 @@ def heatmap_Area400(df):
     totale_prelievi_Area400 = np.sum(heatmap_data)
    
     return totale_prelievi_Area400  
+
+def heatmap_Area300(df, piano):
+    Area300_df = df[(df['Area'] == 'Area300') & (df['ripiano'] == piano)]
+    
+    # Raggruppa per 'Ubicazione' e somma le copie prelevate
+    Area300_df = Area300_df.groupby('Ubicazione')['Copie Prelevate'].sum().reset_index()
+    
+    #creo fila e colonna
+    Area300_df['Fila'] = Area300_df['Ubicazione'].str[:3]
+    Area300_df['Colonna'] = Area300_df['Ubicazione'].str[4:7]
+   
+    #creo array x e y (valori corsia e campata unici e ordinati)
+    sorted_df = Area300_df.sort_values(by='Fila')
+    x = sorted_df['Fila'].unique()
+    sorted_df = Area300_df.sort_values(by='Colonna')
+    y = sorted_df['Colonna'].unique()
+    
+    
+    # Crea un array vuoto delle dimensioni appropriate per la heatmap
+    heatmap_data = np.zeros((len(y), len(x)))
+    
+    # Riempimento dell'array con i valori delle 'Copie Prelevate'
+    for i, colonna in enumerate(y):
+        for j, fila in enumerate(x):
+            selected_row = Area300_df[(Area300_df['Colonna'] == colonna) & (Area300_df['Fila'] == fila)]
+            if not selected_row.empty:
+                heatmap_data[i][j] = selected_row['Copie Prelevate'].iloc[0]
+    
+    # Creazione della heatmap utilizzando Plotly Express
+    fig = px.imshow(
+        heatmap_data,
+        x=x,
+        y=y,
+        color_continuous_scale=[
+            [0.0, 'rgb(100, 150, 50)'],
+            [0.2, 'yellow'],
+            [0.6, 'orange'],
+            [0.8, 'red'],
+            [1.0, 'red']
+        ]
+    )
+    
+    # Personalizzazione del layout della heatmap
+    fig.update_layout(
+        xaxis_title="Fila",
+        yaxis_title="Colonna",
+        xaxis_side="top"  # Posiziona l'asse x in alto
+    )
+    # Personalizza il testo del cursore
+    fig.update_traces(hovertemplate="Fila: %{x}<br>Colonna: %{y}<br>Copie Prelevate: %{z}")
+    # Mostra la figura Plotly utilizzando Streamlit
+    st.plotly_chart(fig)
+    
+    #totale prelievi di area
+    totale_prelievi_Area300 = np.sum(heatmap_data)
+   
+    return totale_prelievi_Area300  
+   
+   
     
 #funzione produttività per ordine
 def calculate_productivity_per_order(df):
@@ -269,6 +328,7 @@ def main():
     st.sidebar.markdown("""
     - [Heatmap Area100](#heatmap-Area100)
     - [Heatmap Area200](#heatmap-Area200)
+    - [Heatmap Area300](#heatmap-Area300)
     - [Heatmap Area400](#heatmap-Area400)
     """, unsafe_allow_html=True)
     
@@ -352,6 +412,16 @@ def main():
         percentuale =  (totale_prelievi_Area200_nel_periodo/totale_prelievi_nel_periodo)*100
         st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
         st.markdown("---")
+
+        #Heatmap Area 300 piano 1
+       st.markdown("<a name='heatmap-Area300'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
+        st.header('Heatmap Area 300')
+        totale_prelievi_Area300_nel_periodo = int(heatmap_Area300(updated_totale_ubicazioni_df,1))
+        st.subheader(f"Totale prelievi Area 300 piano 1: {totale_prelievi_Area300_nel_periodo}" )
+        percentuale =  (totale_prelievi_Area300_nel_periodo/totale_prelievi_nel_periodo)*100
+        st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
+        st.markdown("---")
+
 
          #Heatmap Area 400
         st.markdown("<a name='heatmap-Area400'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
