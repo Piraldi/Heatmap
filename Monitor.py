@@ -107,7 +107,7 @@ def heatmap_Area100(df):
     return totale_prelievi_Area100  
 
 def heatmap_Area200(df):
-    Area200_df = df[df['Area'] == 'Area100']
+    Area200_df = df[df['Area'] == 'Area200']
     
     # Raggruppa per 'Ubicazione' e somma le copie prelevate
     Area200_df = Area200_df.groupby('Ubicazione')['Copie Prelevate'].sum().reset_index()
