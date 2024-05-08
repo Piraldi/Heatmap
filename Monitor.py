@@ -52,7 +52,8 @@ def update_copie_prelevate(totale_ubicazioni_df, pivot_df):
 def heatmap_Area100(df):
     Area100_df = df[df['Area'] == '100']
     
-    #st.dataframe(Area100_df)
+    st.write("Dataframe Area 100 ")
+    st.dataframe(Area100_df)
     # Raggruppa per 'Ubicazione' e somma le copie prelevate
     Area100_df = Area100_df.groupby('Ubicazione')['Copie Prelevate'].sum().reset_index()
     
@@ -66,8 +67,8 @@ def heatmap_Area100(df):
     sorted_df = Area100_df.sort_values(by='Colonna')
     y = sorted_df['Colonna'].unique()
     
-    #st.write("Dataframe S01 con corsia e campata")
-    #st.dataframe(Area100_df)
+    st.write("Dataframe Area 100 con corsia e campata")
+    st.dataframe(Area100_df)
     
     # Crea un array vuoto delle dimensioni appropriate per la heatmap
     heatmap_data = np.zeros((len(y), len(x)))
