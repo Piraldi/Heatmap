@@ -113,8 +113,8 @@ def heatmap_Area200(df):
     Area200_df = Area200_df.groupby('Ubicazione')['Copie Prelevate'].sum().reset_index()
     
     #creo fila e colonna
-    Area200_df['Fila'] = Area200_df['Ubicazione'].str[:3]
-    Area200_df['Colonna'] = Area200_df['Ubicazione'].str[4:7]
+    Area100_df['Fila'] = Area200_df['Ubicazione'].str[:3]
+    Area100_df['Colonna'] = Area200_df['Ubicazione'].str[4:7]
    
     #creo array x e y (valori corsia e campata unici e ordinati)
     sorted_df = Area200_df.sort_values(by='Fila')
@@ -136,8 +136,8 @@ def heatmap_Area200(df):
     # Creazione della heatmap utilizzando Plotly Express
     fig = px.imshow(
         heatmap_data,
-        x=y, #inverto assi per migliore visibilità
-        y=x,
+        x=x,
+        y=y,
         color_continuous_scale=[
             [0.0, 'rgb(100, 150, 50)'],
             [0.2, 'yellow'],
@@ -149,12 +149,12 @@ def heatmap_Area200(df):
     
     # Personalizzazione del layout della heatmap
     fig.update_layout(
-        xaxis_title="Colonna",
-        yaxis_title="Fila",
+        xaxis_title="Fila",
+        yaxis_title="Colonna",
         xaxis_side="top"  # Posiziona l'asse x in alto
     )
     # Personalizza il testo del cursore
-    fig.update_traces(hovertemplate="Colonna: %{x}<br>Fila: %{y}<br>Copie Prelevate: %{z}")
+    fig.update_traces(hovertemplate="Fila: %{x}<br>Colonna: %{y}<br>Copie Prelevate: %{z}")
     # Mostra la figura Plotly utilizzando Streamlit
     st.plotly_chart(fig)
     
