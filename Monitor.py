@@ -57,8 +57,8 @@ def heatmap_Area100(df):
     Area100_df = Area100_df.groupby('Ubicazione')['Copie Prelevate'].sum().reset_index()
     
     #creo fila e colonna
-    Area100_df['Fila'] = Area100_df['Ubicazione'].str[6:8]
-    Area100_df['Colonna'] = Area100_df['Ubicazione'].str[9:11]
+    Area100_df['Fila'] = Area100_df['Ubicazione'].str[:3]
+    Area100_df['Colonna'] = Area100_df['Ubicazione'].str[4:7]
    
     #creo array x e y (valori corsia e campata unici e ordinati)
     sorted_df = Area100_df.sort_values(by='Fila')
