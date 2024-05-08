@@ -265,7 +265,7 @@ def to_excel(df):
 # Funzione principale dell'applicazione Streamlit
 def main():
     # Creazione del sommario delle heatmap nella sidebar
-    st.sidebar.title("Sommario Heatmaps")
+    st.sidebar.title("Sommario Heatmap")
     st.sidebar.markdown("""
     - [Heatmap Area100](#heatmap-Area100)
     - [Heatmap Area200](#heatmap-Area200)
