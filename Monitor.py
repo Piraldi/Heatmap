@@ -234,11 +234,11 @@ def main():
         missioni_df['FILA'] = missioni_df['FILA'].astype(str).str.zfill(3)
         missioni_df['COLONNA'] = missioni_df['COLONNA'].astype(str).str.zfill(3)
         missioni_df['RIPIANO'] = missioni_df['RIPIANO'].astype(str).str.zfill(3)
-        missioni_df['FRAZIONAMENTO'] = missioni_df['FRAZIONAMENTO'].astype(str).str.zfill(3)
+        
         
         
         # Crea una nuova colonna 'ubicazione nel formato 'fila.colonna.rip.fraz'
-        missioni_df['UBICAZIONE'] = missioni_df['FILA'] + '.' + missioni_df['COLONNA'] + '.' + missioni_df['RIPIANO'] + '.' + missioni_df['FRAZIONAMENTO']
+        missioni_df['UBICAZIONE'] = missioni_df['FILA'] + '.' + missioni_df['COLONNA'] + '.' + missioni_df['RIPIANO']
         st.write("Contenuto del file 'Missioni':")
         st.dataframe(missioni_df)
     
