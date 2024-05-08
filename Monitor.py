@@ -113,8 +113,8 @@ def heatmap_Area200(df):
     Area200_df = Area200_df.groupby('Ubicazione')['Copie Prelevate'].sum().reset_index()
     
     #creo fila e colonna
-    Area100_df['Fila'] = Area200_df['Ubicazione'].str[:3]
-    Area100_df['Colonna'] = Area200_df['Ubicazione'].str[4:7]
+    Area200_df['Fila'] = Area200_df['Ubicazione'].str[:3]
+    Area200_df['Colonna'] = Area200_df['Ubicazione'].str[4:7]
    
     #creo array x e y (valori corsia e campata unici e ordinati)
     sorted_df = Area200_df.sort_values(by='Fila')
