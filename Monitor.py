@@ -320,11 +320,8 @@ def main():
         #st.write("Tabella Pivot 'Missioni':")
         #st.dataframe(pivot_missioni)
         updated_totale_ubicazioni_df = update_copie_prelevate(totale_ubicazioni_df, pivot_missioni)
-        st.write("TOTALE UBICAZIONI AGGIORNATO")
-        st.dataframe(updated_totale_ubicazioni_df)
-        # Elimina la colonna 2 dal nuovo dataframe
-        #updated_totale_ubicazioni_df = updated_totale_ubicazioni_df.drop(updated_totale_ubicazioni_df.columns[1], axis=1)
         
+       
         
         st.markdown("---")
         totale_prelievi_nel_periodo = int(filtered_df['QTA PRELEVATA'].sum())
