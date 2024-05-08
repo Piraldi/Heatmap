@@ -108,11 +108,13 @@ def main():
         # Trasforma la colonna desiderata in stringa
         missioni_df['ARTICOLO'] = missioni_df['ARTICOLO'].astype(str)
         missioni_df[' ORDINE'] = missioni_df[' ORDINE'].astype(str)
+
+        # Formatta i numeri nella colonna per avere tre cifre
+        missioni_df['FILA'] = missioni_df['FILA'].astype(str).str.zfill(3)
+        missioni_df['COLONNA'] = missioni_df['COLONNA'].astype(str).str.zfill(3)
+        missioni_df['RIPIANO'] = missioni_df['RIPIANO'].astype(str).str.zfill(3)
+        missioni_df['FRAZIONAMENTO'] = missioni_df['FRAZIONAMENTO'].astype(str).str.zfill(3)
         
-        missioni_df['FILA'] = missioni_df['FILA'].astype(str)
-        missioni_df['COLONNA'] = missioni_df['COLONNA'].astype(str)
-        missioni_df['RIPIANO'] = missioni_df['RIPIANO'].astype(str)
-        missioni_df['FRAZIONAMENTO'] = missioni_df['FRAZIONAMENTO'].astype(str)
         
         # Crea una nuova colonna 'ubicazione nel formato 'fila.colonna.rip.fraz'
         missioni_df['UBICAZIONE'] = missioni_df['FILA'] + '.' + missioni_df['COLONNA'] + '.' + missioni_df['RIPIANO'] + '.' + missioni_df['FRAZIONAMENTO']
