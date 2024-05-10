@@ -399,6 +399,11 @@ def main():
 
         # Aggiunta del grafico a Streamlit
         st.plotly_chart(fig)
+        # Calcolo del totale delle copie prelevate
+        totale_copie_prelevate = area_sums['Copie Prelevate'].sum()
+
+        # Aggiunta del valore totale sotto al grafico
+        st.write(f"Totale copie prelevate: {totale_copie_prelevate}")
         st.markdown("---")
     
 
