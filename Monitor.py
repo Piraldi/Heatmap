@@ -340,8 +340,10 @@ def main():
     if missioni:
         
         totale_ubicazioni_df = pd.read_csv('totale_ubicazioni.csv', sep=";")
+        # Rimuovi i duplicati nella colonna 'Ubicazione' (alcune ubicazioni hanno frazionati diversi)
+        totale_ubicazioni_df.drop_duplicates(subset=['Ubicazione'], inplace=True)
        
-        #st.write("Contenuto del file 'Missioni':")
+       
         missioni_df = load_data(missioni)
         
         # Trasforma la colonna desiderata in stringa
@@ -357,8 +359,11 @@ def main():
         
         # Crea una nuova colonna 'ubicazione nel formato 'fila.colonna.rip.fraz'
         missioni_df['UBICAZIONE'] = missioni_df['FILA'] + '.' + missioni_df['COLONNA'] + '.' + missioni_df['RIPIANO']
-        st.write("Contenuto del file 'Missioni':")
+        st.write("Contenuto del file:")
         st.dataframe(missioni_df)
+
+        st.write("Contenuto del file ubicazioni:")
+        st.dataframe(totale_ubicazioni_df)
     
         
         # Filtrare le righe con NaN o valori non validi
