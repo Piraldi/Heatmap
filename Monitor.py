@@ -361,10 +361,6 @@ def main():
         missioni_df['UBICAZIONE'] = missioni_df['FILA'] + '.' + missioni_df['COLONNA'] + '.' + missioni_df['RIPIANO']
         st.write("Contenuto del file:")
         st.dataframe(missioni_df)
-
-        st.write("Contenuto del file ubicazioni:")
-        st.dataframe(totale_ubicazioni_df)
-    
         
         # Filtrare le righe con NaN o valori non validi
         righe_nan = missioni_df[missioni_df['QTA PRELEVATA'].isna()]
