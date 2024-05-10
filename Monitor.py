@@ -387,8 +387,17 @@ def main():
         totale_prelievi_nel_periodo = int(filtered_df['QTA PRELEVATA'].sum())
 
         # Istogramma copie per area
+        # Calcolo delle somme per ogni area
         area_sums = updated_totale_ubicazioni_df.groupby('Area')['Copie Prelevate'].sum().reset_index()
-        fig = px.bar(area_sums, x='Area', y='Copie Prelevate', title='Copie Prelevate per Area')
+
+        # Calcolo della percentuale per ogni area rispetto al totale
+        area_sums['Percentuale'] = (area_sums['Copie Prelevate'] / area_sums['Copie Prelevate'].sum()) * 100
+
+        # Creazione dell'istogramma con le percentuali
+        fig = px.bar(area_sums, x='Area', y='Copie Prelevate', text='Percentuale', title='Copie Prelevate per Area (%)')
+        fig.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
+
+        # Aggiunta del grafico a Streamlit
         st.plotly_chart(fig)
         st.markdown("---")
     
