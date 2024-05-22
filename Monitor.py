@@ -315,7 +315,7 @@ def calculate_productivity_per_order_pallet(df):
 
 #funzione produttività per ordine pick&pack
 def calculate_productivity_per_order_pickpack(df):
-    df = df[df['TIPO SCATOLA'] == 'BANC']
+    df = df.drop('BANC', axis=0)
     
     # Conversione della colonna 'ORA PRELIEVO' in formato datetime
     df['ORA PRELIEVO'] = pd.to_datetime(df['ORA PRELIEVO'], format='%H.%M.%S', errors='coerce')
