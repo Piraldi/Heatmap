@@ -281,8 +281,8 @@ def heatmap_Area300(df, piano):
    
     
 #funzione produttività per ordine
-def calculate_productivity_per_order(df):
-    
+def calculate_productivity_per_order_pallet(df):
+    df = df[df['TIPO SCATOLA'] == 'BANC']
     
     # Conversione della colonna 'ORA PRELIEVO' in formato datetime
     df['ORA PRELIEVO'] = pd.to_datetime(df['ORA PRELIEVO'], format='%H.%M.%S', errors='coerce')
@@ -448,8 +448,8 @@ def main():
         st.markdown("---")
         
         # Chiama la funzione per calcolare la produttività per ordine
-        productivity_df_per_order = calculate_productivity_per_order(filtered_df)
-        st.header("Productivity Per Order")
+        productivity_df_per_order = calculate_productivity_per_order_pallet(filtered_df)
+        st.header("Productivity Pallet")
         # Crea una tabella interattiva per visualizzare i risultati
         st.dataframe(productivity_df_per_order)
         # Bottone di download
