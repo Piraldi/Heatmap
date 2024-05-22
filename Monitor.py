@@ -494,7 +494,7 @@ def main():
         st.markdown("---")
         
         # Chiama la funzione per calcolare la produttività per pick&pack
-        productivity_df_per_order_pickpack = calculate_productivity_per_order_pallet(filtered_df)
+        productivity_df_per_order_pickpack = calculate_productivity_per_order_pickpack(filtered_df)
         st.header("Productivity Pick&pack")
         # Crea una tabella interattiva per visualizzare i risultati
         st.dataframe(productivity_df_per_order_pickpack)
