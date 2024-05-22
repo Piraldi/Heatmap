@@ -280,7 +280,7 @@ def heatmap_Area300(df, piano):
    
    
     
-#funzione produttività per ordine
+#funzione produttività per ordine a pallet
 def calculate_productivity_per_order_pallet(df):
     df = df[df['TIPO SCATOLA'] == 'BANC']
     
@@ -295,6 +295,39 @@ def calculate_productivity_per_order_pallet(df):
 
     # Raggruppa per ordine, utente,data, tipo cliente e tipo prelievo
     productivity_df_per_order = df.groupby([' ORDINE','UTENTE PRELIEVO', 'DATA PRELIEVO','TIPO SCATOLA']).agg({
+        'QTA PRELEVATA': 'sum',
+        'ARTICOLO': 'size',# Conteggio delle righe per ogni gruppo
+        'ORA PRELIEVO': lambda x: (x.max() - x.min()).total_seconds() / 3600,
+        }).reset_index()
+
+    # Calcola la produttività (quantità movimentata per ora)
+    productivity_df_per_order['Produttività'] = productivity_df_per_order['QTA PRELEVATA'] / productivity_df_per_order['ORA PRELIEVO']
+    # Rinomina le colonne
+    productivity_df_per_order.rename(columns={
+        'QTA PRELEVATA': 'Q tot',
+        'ARTICOLO': 'Righe tot',
+        'ORA PRELIEVO': 'Ore tot',
+        'Produttività': 'Produttività tot'
+    }, inplace=True)
+    
+    
+    return productivity_df_per_order
+
+#funzione produttività per ordine pick&pack
+def calculate_productivity_per_order_pickpack(df):
+    df = df[df['TIPO SCATOLA'] == 'BANC']
+    
+    # Conversione della colonna 'ORA PRELIEVO' in formato datetime
+    df['ORA PRELIEVO'] = pd.to_datetime(df['ORA PRELIEVO'], format='%H.%M.%S', errors='coerce')
+    
+    # Assicurati che 'Quantità Movimentata' sia in formato numerico
+    df['QTA PRELEVATA'] = pd.to_numeric(df['QTA PRELEVATA'], errors='coerce')
+    
+    # Rimuovi le righe con valori NaN nella colonna 'Quantità Movimentata'
+    df = df.dropna(subset=['QTA PRELEVATA'])
+
+    # Raggruppa per ordine, utente,data, tipo cliente e tipo prelievo
+    productivity_df_per_order = df.groupby(['UTENTE PRELIEVO', 'N. PIANO','GIRO', 'ROLL']).agg({
         'QTA PRELEVATA': 'sum',
         'ARTICOLO': 'size',# Conteggio delle righe per ogni gruppo
         'ORA PRELIEVO': lambda x: (x.max() - x.min()).total_seconds() / 3600,
@@ -447,18 +480,33 @@ def main():
         st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
         st.markdown("---")
         
-        # Chiama la funzione per calcolare la produttività per ordine
-        productivity_df_per_order = calculate_productivity_per_order_pallet(filtered_df)
+        # Chiama la funzione per calcolare la produttività per ordine a pallet
+        productivity_df_per_order_pallet = calculate_productivity_per_order_pallet(filtered_df)
         st.header("Productivity Pallet")
         # Crea una tabella interattiva per visualizzare i risultati
-        st.dataframe(productivity_df_per_order)
+        st.dataframe(productivity_df_per_order_pallet)
         # Bottone di download
-        tab_1 = to_excel(productivity_df_per_order)
+        tab_1 = to_excel(productivity_df_per_order_pallet)
         st.download_button(label='📥 Download tabella',
                            data=tab_1,
                            file_name='dataframe.xlsx',
                            mime='application/vnd.ms-excel')
         st.markdown("---")
+        
+        # Chiama la funzione per calcolare la produttività per pick&pack
+        productivity_df_per_order_pickpack = calculate_productivity_per_order_pallet(filtered_df)
+        st.header("Productivity Pick&pack")
+        # Crea una tabella interattiva per visualizzare i risultati
+        st.dataframe(productivity_df_per_order_pickpack)
+        # Bottone di download
+        tab_2 = to_excel(productivity_df_per_order_pickpack)
+        st.download_button(label='📥 Download tabella',
+                           data=tab_2,
+                           file_name='dataframe.xlsx',
+                           mime='application/vnd.ms-excel')
+        st.markdown("---")
+
+
 
 
 
