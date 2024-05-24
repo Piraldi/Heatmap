@@ -331,6 +331,7 @@ def calculate_productivity_per_order_pickpack(df):
         'QTA PRELEVATA': 'sum',
         'ARTICOLO': 'size',# Conteggio delle righe per ogni gruppo
         'ORA PRELIEVO': lambda x: (x.max() - x.min()).total_seconds() / 3600,
+        'CASSETTI': pd.Series.nunique,  # Conteggio dei valori unici nella colonna 'CASSETTI'
         }).reset_index()
 
     # Calcola la produttività (quantità movimentata per ora)
