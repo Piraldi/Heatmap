@@ -500,11 +500,45 @@ def main():
         # Aggiunta del grafico a Streamlit
         st.plotly_chart(fig)
         # Calcolo del totale delle copie prelevate
-        totale_copie_prelevate_RE = area_sums_ME['Copie Prelevate'].sum()
+        totale_copie_prelevate_RE = area_sums_RE['Copie Prelevate'].sum()
 
         # Aggiunta del valore totale sotto al grafico
         st.write(f"Totale copie prelevate RE: {totale_copie_prelevate_RE}")
         st.markdown("---")
+
+        #Istogramma DA
+        filtered_df_DA = filtered_df[filtered_df['SOC'] == 'DA']
+        pivot_missioni_DA = filtered_df_DA.pivot_table(index='UBICAZIONE', values='QTA PRELEVATA', aggfunc='sum')
+        #st.write("Tabella Pivot 'Missioni DA':")
+        #st.dataframe(pivot_missioni_DA)
+        
+        updated_totale_ubicazioni_df_DA = update_copie_prelevate(totale_ubicazioni_df, pivot_missioni_DA)
+        #st.write("totale ubicazioni DA:")
+        #st.dataframe(updated_totale_ubicazioni_df_DA)
+        
+        st.markdown("---")
+        totale_prelievi_nel_periodo_DA = int(filtered_df_DA['QTA PRELEVATA'].sum())
+
+        # Istogramma copie per area
+        # Calcolo delle somme per ogni area
+        area_sums_DA = updated_totale_ubicazioni_df_DA.groupby('Area')['Copie Prelevate'].sum().reset_index()
+
+        # Calcolo della percentuale per ogni area rispetto al totale
+        area_sums_DA['Percentuale'] = (area_sums_DA['Copie Prelevate'] / area_sums_DA['Copie Prelevate'].sum()) * 100
+
+        # Creazione dell'istogramma con le percentuali
+        fig = px.bar(area_sums_DA, x='Area', y='Copie Prelevate', text='Percentuale', title='DA Copie Prelevate per Area (%)')
+        fig.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
+
+        # Aggiunta del grafico a Streamlit
+        st.plotly_chart(fig)
+        # Calcolo del totale delle copie prelevate
+        totale_copie_prelevate_RE = area_sums_DA['Copie Prelevate'].sum()
+
+        # Aggiunta del valore totale sotto al grafico
+        st.write(f"Totale copie prelevate DA: {totale_copie_prelevate_DA}")
+        st.markdown("---")
+
 
 
 
