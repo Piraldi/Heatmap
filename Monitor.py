@@ -473,6 +473,40 @@ def main():
         st.write(f"Totale copie prelevate ME: {totale_copie_prelevate_ME}")
         st.markdown("---")
 
+        #Istogramma RE
+        filtered_df_RE = filtered_df[filtered_df['SOC'] == 'RE']
+        pivot_missioni_RE = filtered_df_RE.pivot_table(index='UBICAZIONE', values='QTA PRELEVATA', aggfunc='sum')
+        #st.write("Tabella Pivot 'Missioni RE':")
+        #st.dataframe(pivot_missioni_RE)
+        
+        updated_totale_ubicazioni_df_RE = update_copie_prelevate(totale_ubicazioni_df, pivot_missioni_RE)
+        #st.write("totale ubicazioni RE:")
+        #st.dataframe(updated_totale_ubicazioni_df_RE)
+        
+        st.markdown("---")
+        totale_prelievi_nel_periodo_RE = int(filtered_df_RE['QTA PRELEVATA'].sum())
+
+        # Istogramma copie per area
+        # Calcolo delle somme per ogni area
+        area_sums_RE = updated_totale_ubicazioni_df_RE.groupby('Area')['Copie Prelevate'].sum().reset_index()
+
+        # Calcolo della percentuale per ogni area rispetto al totale
+        area_sums_RE['Percentuale'] = (area_sums_RE['Copie Prelevate'] / area_sums_RE['Copie Prelevate'].sum()) * 100
+
+        # Creazione dell'istogramma con le percentuali
+        fig = px.bar(area_sums_RE, x='Area', y='Copie Prelevate', text='Percentuale', title='RE Copie Prelevate per Area (%)')
+        fig.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
+
+        # Aggiunta del grafico a Streamlit
+        st.plotly_chart(fig)
+        # Calcolo del totale delle copie prelevate
+        totale_copie_prelevate_RE = area_sums_ME['Copie Prelevate'].sum()
+
+        # Aggiunta del valore totale sotto al grafico
+        st.write(f"Totale copie prelevate RE: {totale_copie_prelevate_RE}")
+        st.markdown("---")
+
+
 
 
         #Heatmap Area 100
