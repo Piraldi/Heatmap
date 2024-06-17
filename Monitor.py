@@ -443,7 +443,7 @@ def main():
 
         #Istogramma ME
         filtered_df_ME = filtered_df[filtered_df['SOC'] == 'ME']
-        pivot_missioni_ME = filtered_df.pivot_table(index='UBICAZIONE', values='QTA PRELEVATA', aggfunc='sum')
+        pivot_missioni_ME = filtered_df_ME.pivot_table(index='UBICAZIONE', values='QTA PRELEVATA', aggfunc='sum')
         updated_totale_ubicazioni_df_ME = update_copie_prelevate(totale_ubicazioni_df, pivot_missioni_ME)
         
         st.markdown("---")
