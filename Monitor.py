@@ -412,10 +412,11 @@ def main():
         #st.dataframe(filtered_df)
 
         pivot_missioni = filtered_df.pivot_table(index='UBICAZIONE', values='QTA PRELEVATA', aggfunc='sum')
-        #st.write("Tabella Pivot 'Missioni':")
-        #st.dataframe(pivot_missioni)
+        st.write("Tabella Pivot 'Missioni':")
+        st.dataframe(pivot_missioni)
         updated_totale_ubicazioni_df = update_copie_prelevate(totale_ubicazioni_df, pivot_missioni)
-        
+        st.write("totale ubicazioni:")
+        st.dataframe(updated_totale_ubicazioni_df)
        
         
         st.markdown("---")
@@ -444,7 +445,12 @@ def main():
         #Istogramma ME
         filtered_df_ME = filtered_df[filtered_df['SOC'] == 'ME']
         pivot_missioni_ME = filtered_df_ME.pivot_table(index='UBICAZIONE', values='QTA PRELEVATA', aggfunc='sum')
+        st.write("Tabella Pivot 'Missioni ME':")
+        st.dataframe(pivot_missioni_ME)
+        
         updated_totale_ubicazioni_df_ME = update_copie_prelevate(totale_ubicazioni_df, pivot_missioni_ME)
+        st.write("totale ubicazioni ME:")
+        st.dataframe(updated_totale_ubicazioni_df_ME)
         
         st.markdown("---")
         totale_prelievi_nel_periodo_ME = int(filtered_df_ME['QTA PRELEVATA'].sum())
