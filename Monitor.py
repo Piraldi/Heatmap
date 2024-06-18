@@ -49,6 +49,37 @@ def update_copie_prelevate(totale_ubicazioni_df, pivot_df):
     totale_ubicazioni_df['Copie Prelevate'] = updated_copie_prelevate
     return totale_ubicazioni_df
 
+def crea_istogramma_per_soc(soc):
+    # Filtra i dati per il SOC specificato
+    filtered_df_soc = filtered_df[filtered_df['SOC'] == soc]
+    pivot_missioni_soc = filtered_df_soc.pivot_table(index='UBICAZIONE', values='QTA PRELEVATA', aggfunc='sum')
+    
+    # Aggiorna le copie prelevate
+    updated_totale_ubicazioni_df_soc = update_copie_prelevate(totale_ubicazioni_df, pivot_missioni_soc)
+    
+    # Calcola le somme per ogni area
+    area_sums_soc = updated_totale_ubicazioni_df_soc.groupby('Area')['Copie Prelevate'].sum().reset_index()
+    
+    # Calcola la percentuale per ogni area rispetto al totale
+    area_sums_soc['Percentuale'] = (area_sums_soc['Copie Prelevate'] / area_sums_soc['Copie Prelevate'].sum()) * 100
+    
+    # Crea il titolo del grafico basato sul SOC
+    titolo = f'{soc} Copie Prelevate per Area (%)'
+    
+    # Crea l'istogramma con le percentuali
+    fig = px.bar(area_sums_soc, x='Area', y='Copie Prelevate', text='Percentuale', title=titolo)
+    fig.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
+    
+    # Aggiungi il grafico a Streamlit
+    st.plotly_chart(fig)
+    
+    # Calcola il totale delle copie prelevate
+    totale_copie_prelevate_soc = area_sums_soc['Copie Prelevate'].sum()
+    
+    # Aggiungi il valore totale sotto al grafico
+    st.write(f"Totale copie prelevate {soc}: {totale_copie_prelevate_soc}")
+    st.markdown("---")
+    
 def heatmap_Area100(df):
     Area100_df = df[df['Area'] == 'Area100']
     
@@ -539,6 +570,17 @@ def main():
         st.write(f"Totale copie prelevate DA: {totale_copie_prelevate_DA}")
         st.markdown("---")
 
+        st.markdown("## Istogramma copie per area")
+
+        # Genera l'istogramma per ME
+        crea_istogramma_per_soc(filtered_df, totale_ubicazioni_df, 'ME')
+
+        # Genera l'istogramma per RE
+        crea_istogramma_per_soc(filtered_df, totale_ubicazioni_df, 'RE')
+
+        # Genera l'istogramma per DA
+        crea_istogramma_per_soc(filtered_df, totale_ubicazioni_df, 'DA')
+ 
        
 
         #Heatmap Area 100
