@@ -573,13 +573,13 @@ def main():
         st.markdown("## Istogramma copie per area")
 
         # Genera l'istogramma per ME
-        crea_istogramma_per_soc(filtered_df, totale_ubicazioni_df, 'ME')
+        crea_istogramma_per_soc('ME')
 
         # Genera l'istogramma per RE
-        crea_istogramma_per_soc(filtered_df, totale_ubicazioni_df, 'RE')
+        crea_istogramma_per_soc('RE')
 
         # Genera l'istogramma per DA
-        crea_istogramma_per_soc(filtered_df, totale_ubicazioni_df, 'DA')
+        crea_istogramma_per_soc('DA')
  
        
 
