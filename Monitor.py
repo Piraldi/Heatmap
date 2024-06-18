@@ -539,7 +539,48 @@ def main():
         st.write(f"Totale copie prelevate DA: {totale_copie_prelevate_DA}")
         st.markdown("---")
 
+        # Unione dei dati delle diverse case editrici
+        case_editrici = ['ME', 'RE', 'DA']
+        filtered_df['SOC'] = filtered_df['SOC'].astype(str)
 
+        # Creazione di un dataframe unico con l'indicazione della casa editrice
+        dfs = []
+        for casa in case_editrici:
+         temp_df = filtered_df[filtered_df['SOC'] == casa]
+         temp_df['Casa Editrice'] = casa
+         dfs.append(temp_df)
+
+        combined_df = pd.concat(dfs)
+
+        # Creazione del selettore in Streamlit
+        selected_editrice = st.multiselect('Seleziona Casa Editrice', case_editrici, default=case_editrici)
+
+        # Filtraggio dei dati in base alla selezione
+        filtered_combined_df = combined_df[combined_df['Casa Editrice'].isin(selected_editrice)]
+        pivot_missioni_combined = filtered_combined_df.pivot_table(index='UBICAZIONE', values='QTA PRELEVATA', aggfunc='sum').reset_index()
+
+        # Aggiornamento delle copie prelevate
+        updated_totale_ubicazioni_df_combined = update_copie_prelevate(totale_ubicazioni_df, pivot_missioni_combined)
+
+        # Calcolo delle somme per ogni area
+        area_sums_combined = updated_totale_ubicazioni_df_combined.groupby('Area')['Copie Prelevate'].sum().reset_index()
+
+        # Calcolo della percentuale per ogni area rispetto al totale
+        area_sums_combined['Percentuale'] = (area_sums_combined['Copie Prelevate'] / area_sums_combined['Copie Prelevate'].sum()) * 100
+
+        # Creazione dell'istogramma con le percentuali
+        fig = px.bar(area_sums_combined, x='Area', y='Copie Prelevate', text='Percentuale', title='Copie Prelevate per Area (%)')
+        fig.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
+
+        # Aggiunta del grafico a Streamlit
+        st.plotly_chart(fig)
+
+        # Calcolo del totale delle copie prelevate
+        totale_copie_prelevate_combined = area_sums_combined['Copie Prelevate'].sum()
+
+        # Aggiunta del valore totale sotto al grafico
+        st.write(f"Totale copie prelevate: {totale_copie_prelevate_combined}")
+        st.markdown("---")
 
 
 
