@@ -569,18 +569,6 @@ def main():
         # Aggiunta del valore totale sotto al grafico
         st.write(f"Totale copie prelevate DA: {totale_copie_prelevate_DA}")
         st.markdown("---")
-
-        st.markdown("## Istogramma copie per area")
-
-        # Genera l'istogramma per ME
-        crea_istogramma_per_soc('ME')
-
-        # Genera l'istogramma per RE
-        crea_istogramma_per_soc('RE')
-
-        # Genera l'istogramma per DA
-        crea_istogramma_per_soc('DA')
- 
        
 
         #Heatmap Area 100
