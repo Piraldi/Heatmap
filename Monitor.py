@@ -338,7 +338,6 @@ def main():
     - [Heatmap Area100](#heatmap-Area100)
     - [Heatmap Area200](#heatmap-Area200)
     - [Heatmap Area300](#heatmap-Area300)
-    - [Heatmap Area400](#heatmap-Area400)
     """, unsafe_allow_html=True)
     
     st.title("Monitor Education")
