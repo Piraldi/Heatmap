@@ -257,7 +257,8 @@ def heatmap_Area300(df, piano):
     
 #funzione produttività per ordine a pallet
 def calculate_productivity_per_order_pallet(df):
-    df = df[df['TIPO SCATOLA'] == 'BANC' or ['TIPO SCATOLA']== 'ROLL']
+    df = df[(df['TIPO SCATOLA'] == 'BANC') | (df['TIPO SCATOLA'] == 'ROLL')]
+
     
     # Conversione della colonna 'ORA PRELIEVO' in formato datetime
     df['ORA PRELIEVO'] = pd.to_datetime(df['ORA PRELIEVO'], format='%H.%M.%S', errors='coerce')
