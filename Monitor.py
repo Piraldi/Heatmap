@@ -257,7 +257,7 @@ def heatmap_Area300(df, piano):
     
 #funzione produttività per ordine a pallet
 def calculate_productivity_per_order_pallet(df):
-    df = df[df['TIPO SCATOLA'] == 'BANC']
+    df = df[df['TIPO SCATOLA'] == 'BANC' or ['TIPO SCATOLA']== 'ROLL']
     
     # Conversione della colonna 'ORA PRELIEVO' in formato datetime
     df['ORA PRELIEVO'] = pd.to_datetime(df['ORA PRELIEVO'], format='%H.%M.%S', errors='coerce')
@@ -290,7 +290,7 @@ def calculate_productivity_per_order_pallet(df):
 
 #funzione produttività per ordine pick&pack
 def calculate_productivity_per_order_pickpack(df):
-    df = df[df['TIPO SCATOLA'] != 'BANC']
+    df = df[df['TIPO ROLL'] == 'PICK AND PACK']
     
     # Conversione della colonna 'ORA PRELIEVO' in formato datetime
     df['ORA PRELIEVO'] = pd.to_datetime(df['ORA PRELIEVO'], format='%H.%M.%S', errors='coerce')
@@ -332,13 +332,6 @@ def to_excel(df):
 
 # Funzione principale dell'applicazione Streamlit
 def main():
-    # Creazione del sommario delle heatmap nella sidebar
-    st.sidebar.title("Sommario Heatmap")
-    st.sidebar.markdown("""
-    - [Heatmap Area100](#heatmap-Area100)
-    - [Heatmap Area200](#heatmap-Area200)
-    - [Heatmap Area300](#heatmap-Area300)
-    """, unsafe_allow_html=True)
     
     st.title("Monitor Education")
 
@@ -511,34 +504,6 @@ def main():
 
         # Aggiunta del valore totale sotto al grafico
         st.write(f"Totale copie prelevate DA: {totale_copie_prelevate_DA}")
-        st.markdown("---")
-       
-
-        #Heatmap Area 100
-        st.markdown("<a name='heatmap-Area100'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
-        st.header('Heatmap Area 100')
-        totale_prelievi_Area100_nel_periodo = int(heatmap_Area100(updated_totale_ubicazioni_df))
-        st.subheader(f"Totale prelievi Area 100: {totale_prelievi_Area100_nel_periodo}" )
-        percentuale =  (totale_prelievi_Area100_nel_periodo/totale_prelievi_nel_periodo)*100
-        st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
-        st.markdown("---")
-
-        #Heatmap Area 200
-        st.markdown("<a name='heatmap-Area200'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
-        st.header('Heatmap Area 200')
-        totale_prelievi_Area200_nel_periodo = int(heatmap_Area200(updated_totale_ubicazioni_df))
-        st.subheader(f"Totale prelievi Area 200: {totale_prelievi_Area200_nel_periodo}" )
-        percentuale =  (totale_prelievi_Area200_nel_periodo/totale_prelievi_nel_periodo)*100
-        st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
-        st.markdown("---")
-
-        #Heatmap Area 300 piano 1
-        st.markdown("<a name='heatmap-Area300'></a>", unsafe_allow_html=True) #link per facilitare lo scorrimento
-        st.header('Heatmap Area 300')
-        totale_prelievi_Area300_nel_periodo = int(heatmap_Area300(updated_totale_ubicazioni_df,1))
-        st.subheader(f"Totale prelievi Area 300 piano 1: {totale_prelievi_Area300_nel_periodo}" )
-        percentuale =  (totale_prelievi_Area300_nel_periodo/totale_prelievi_nel_periodo)*100
-        st.subheader(f"% sul totale magazzino: {percentuale:.2f}%")
         st.markdown("---")
 
 
